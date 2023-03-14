@@ -4,11 +4,11 @@ class LogLineParser
   end
 
   def message
-    words_array.last.strip
+    log_line_parts.last.strip
   end
 
   def log_level
-    words_array.first.downcase.slice(1...-1).strip
+    log_line_parts.first.downcase.slice(1...-1).strip
   end
 
   def reformat
@@ -17,7 +17,7 @@ class LogLineParser
 
   private
 
-  def words_array
+  def log_line_parts
     @line.split(':')
   end
 end
