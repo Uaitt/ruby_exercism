@@ -16,9 +16,9 @@ class AssemblyLine
   private
 
   def success_rate
-    return 1 if (1..4).include?(@speed)
+    return 1 if @speed.between?(1, 4)
 
-    return 0.9 if (5..8).include?(@speed)
+    return 0.9 if @speed.between?(5, 8)
 
     return 0.8 if @speed == 9
 
