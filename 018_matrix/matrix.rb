@@ -1,20 +1,13 @@
 class Matrix
   def initialize(data)
-    @data = data
+    @data = data.split("\n").map { |row| row.strip.split(' ').map(&:to_i) }
   end
 
   def rows
-    string_rows = @data.split("\n")
-    string_rows.map { |row| convert_to_numeric_array(row) }
+    @data
   end
 
   def columns
-    rows.transpose
-  end
-
-  private
-
-  def convert_to_numeric_array(row)
-    row.strip.split(' ').map(&:to_i)
+    @data.transpose
   end
 end
