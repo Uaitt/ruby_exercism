@@ -1,6 +1,6 @@
 class Moviegoer
   def initialize(age, member: false)
-    @age = age
+    @age = age.to_i
     @member = member
   end
 

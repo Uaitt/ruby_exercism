@@ -1,6 +1,6 @@
 class Series
   def initialize(data)
-    @data = data
+    @data = data || ''
   end
 
   def slices(substring_length)

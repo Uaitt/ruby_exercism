@@ -6,7 +6,7 @@ class BirdCount
   end
 
   def initialize(birds_per_day)
-    @birds_per_day = birds_per_day
+    @birds_per_day = birds_per_day || []
   end
 
   def yesterday

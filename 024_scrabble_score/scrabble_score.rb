@@ -16,7 +16,7 @@ class Scrabble
   def score
     @word.downcase.split('').inject(0) do |score, letter|
       key = LETTER_VALUES.keys.find { |k| k.include?(letter) }
-      score + LETTER_VALUES[key]
+      score + LETTER_VALUES[key].to_i
     end
   end
 end

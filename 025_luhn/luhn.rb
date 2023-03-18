@@ -2,7 +2,7 @@ class Luhn
   class << self
     def valid?(input)
       input.gsub!(/\s/, '')
-      return false if input.length <= 1 || !input.scan(/\D/).empty?
+      return false if input.length <= 1 || input.match?(/\D/)
 
       double_second_digits(input)
       (input.split('').map(&:to_i).sum % 10).zero?

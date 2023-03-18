@@ -4,7 +4,7 @@ class BoutiqueInventory
   attr_reader :items
 
   def initialize(items)
-    @items = items.map { |item| OpenStruct.new(item) }
+    @items = (items || {}).map { |item| OpenStruct.new(item) }
   end
 
   def item_names

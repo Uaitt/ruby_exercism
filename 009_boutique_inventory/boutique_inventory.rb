@@ -1,6 +1,6 @@
 class BoutiqueInventory
   def initialize(items)
-    @items = items
+    @items = items || {}
   end
 
   def item_names

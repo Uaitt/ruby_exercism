@@ -2,7 +2,7 @@ class HighScores
   attr_reader :scores
 
   def initialize(scores)
-    @scores = scores
+    @scores = scores || []
   end
 
   def latest

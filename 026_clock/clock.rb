@@ -24,17 +24,19 @@ class Clock
   end
 
   def hours
-    raw_hours = @total_minutes / 60
-    if raw_hours >= 24 || raw_hours <= -24
-      raw_hours % 24
-    elsif raw_hours.negative?
-      24 + raw_hours
-    else
-      raw_hours
+    @hours ||= begin
+      raw_hours = @total_minutes / 60
+      if raw_hours >= 24 || raw_hours <= -24
+        raw_hours % 24
+      elsif raw_hours.negative?
+        24 + raw_hours
+      else
+        raw_hours
+      end
     end
   end
 
   def minutes
-    @total_minutes % 60
+    @minutes ||= @total_minutes % 60
   end
 end

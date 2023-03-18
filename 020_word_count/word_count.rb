@@ -1,6 +1,6 @@
 class Phrase
   def initialize(phrase)
-    @phrase = phrase
+    @phrase = phrase || ''
   end
 
   def word_count
