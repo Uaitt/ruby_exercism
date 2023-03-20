@@ -1,5 +1,5 @@
 class Pangram
-  LETTERS = ('a'..'z').to_a.freeze
+  LETTERS = ('a'..'z').freeze
 
   class << self
     def pangram?(sentence)
