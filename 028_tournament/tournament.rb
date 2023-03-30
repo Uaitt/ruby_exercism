@@ -7,7 +7,7 @@ class Tournament
     def tally(tournament, ranking = {})
       add_teams(ranking, tournament)
       add_points(ranking, tournament)
-      sort(ranking)
+      ranking = sort(ranking)
       format(ranking)
     end
 
@@ -33,7 +33,7 @@ class Tournament
     end
 
     def sort(ranking)
-      ranking.sort! { |a, b| [a[1]['P'], b[0]] <=> [b[1]['P'], a[0]] }.reverse
+      ranking.sort { |a, b| [a[1]['P'], b[0]] <=> [b[1]['P'], a[0]] }.reverse
     end
 
     def format(ranking)
