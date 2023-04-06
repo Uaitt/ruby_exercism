@@ -19,14 +19,11 @@ class Scale
   end
 
   def interval(intervals)
-    intervals = intervals.split('')
-    scale = [capitalized_initial_tonic]
     if STARTING_SHARP_TONICS.include?(initial_tonic)
-      generate_scale_for(intervals, SHARP_CHROMATIC_SCALE, scale)
+      diatonic_scale_for(intervals, SHARP_CHROMATIC_SCALE)
     else
-      generate_scale_for(intervals, FLAT_CHROMATIC_SCALE, scale)
+      diatonic_scale_for(intervals, FLAT_CHROMATIC_SCALE)
     end
-    scale
   end
 
   private
@@ -37,21 +34,20 @@ class Scale
     scale.rotate(scale.index(initial_tonic))
   end
 
+  def diatonic_scale_for(intervals, chromatic_scale)
+    scale = [capitalized_initial_tonic]
+    intervals.chars.each do |interval|
+      current_index = chromatic_scale.index(scale.last)
+      wanted_index = current_index + STEPS[interval]
+      wanted_index -= chromatic_scale.length if wanted_index > chromatic_scale.length - 1
+      scale << chromatic_scale[wanted_index]
+    end
+    scale
+  end
+
   def capitalized_initial_tonic
     return initial_tonic.capitalize if initial_tonic[0].downcase == initial_tonic[0]
 
     initial_tonic
-  end
-
-  def generate_scale_for(intervals, chromatic_scale, scale)
-    intervals.each do |interval|
-      current_index = chromatic_scale.index(scale.last)
-      wanted_index = if current_index + STEPS[interval] > chromatic_scale.length - 1
-                       current_index + STEPS[interval] - chromatic_scale.length
-                     else
-                       current_index + STEPS[interval]
-                     end
-      scale << chromatic_scale[wanted_index]
-    end
   end
 end
