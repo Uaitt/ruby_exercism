@@ -1,27 +1,25 @@
-# PLEASE NOTE THAT SOME TESTS ON THIS EXERCISES ARE PROBABLY WRONG
-# in some of them, the resulting matrix has columns of different lengths, which is impossible for a transposed matrix!
-
 class Transpose
   class << self
-    def transpose(input)
-      raw_rows = input.split("\n")
-      pad(raw_rows)
-      rows = raw_rows.map(&:chars)
-      columns = rows.transpose
-      string = []
-      columns.each { |column| string << "#{column.join}\n" }
-      string.join[0...-1]
+    def transpose(input, result = '')
+      return '' if input.empty?
+
+      rows = input.split("\n")
+      max_row_length = rows.each.max_by(&:length).length
+      max_row_length.times { |index_column| add_transposed_column(rows, index_column, result) }
+      result[0...-1]
     end
 
-    def pad(rows)
-      row_length = find_max_length(rows)
-      rows.each { |row| row << '' while row.length != row_length }
-    end
+    private
 
-    def find_max_length(rows)
-      max = 0
-      rows.each { |row| max = row.length if row.length > max }
-      max
+    def add_transposed_column(rows, index_column, result, transposed_row = '')
+      rows.each_with_index do |row, index_row|
+        if !row[index_column].nil?
+          transposed_row << row[index_column]
+        elsif rows[(index_row + 1)..].any? { |sub_row| !sub_row[index_column].nil? }
+          transposed_row << ' '
+        end
+      end
+      result << "#{transposed_row}\n"
     end
   end
 end
