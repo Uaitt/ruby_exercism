@@ -2,12 +2,11 @@ class Tournament
   POINTS_FOR = { 'win' => 3, 'draw' => 1, 'loss' => 0 }.freeze
   SWAP = { 'win' => 'loss',  'draw' => 'draw', 'loss' => 'win' }.freeze
   CONVERT = { 'win' => 'W', 'draw' => 'D', 'loss' => 'L' }.freeze
-  INITIAL_STATE =
+
   class << self
     def tally(tournament, ranking = {})
       add_teams(ranking, tournament)
       add_points(ranking, tournament)
-      ranking = sort(ranking)
       format(ranking)
     end
 
@@ -32,11 +31,8 @@ class Tournament
       end
     end
 
-    def sort(ranking)
-      ranking.sort { |a, b| [a[1]['P'], b[0]] <=> [b[1]['P'], a[0]] }.reverse
-    end
-
     def format(ranking)
+      ranking = ranking.sort { |a, b| [a[1]['P'], b[0]] <=> [b[1]['P'], a[0]] }.reverse
       result = "#{'Team'.ljust(30)} | MP |  W |  D |  L |  P\n"
       ranking.each do |r|
         result += "#{r[0].ljust(30)} |  #{r[1]['MP']} |  #{r[1]['W']} |  #{r[1]['D']} |  #{r[1]['L']} | #{r[1]['P'].to_s.rjust(2)}\n"
