@@ -1,52 +1,54 @@
+# Shamelessly stolen from AlexB52's solution
+# https://github.com/AlexB52/exercism-ruby/blob/main/alphametics/alphametics.rb
+
 class Alphametics
+  attr_reader :rows, :leading_letter
+
   class << self
-    VALID_RESULTS = (0..9).to_a.freeze
-
     def solve(puzzle)
-      unique_letters = split_to_letters(puzzle)
-      addends = split_to_addends(puzzle)
-      VALID_RESULTS.permutation(unique_letters.length) do |permutation|
-        return build_matching(permutation, unique_letters) if permutation_matches?(permutation, addends, unique_letters)
-      end
-      {}
+      new(puzzle).solve
     end
+  end
 
-    private
+  def initialize(puzzle)
+    @rows = puzzle.scan(/[A-Z]+/)
+    @leading_letter = rows.max_by(&:length)[0]
+  end
 
-    def split_to_letters(puzzle)
-      puzzle.split(/[\s+==]/).join.split('').uniq
-    end
+  def solve
+    (1..9).each do |i|
+      ((0..9).to_a - [i]).permutation(linear_equation.length - 1) do |permutation|
+        next unless permutation.unshift(i)
+                               .zip(equation_coefficients)
+                               .sum { |x, y| x * y }
+                               .zero?
 
-    def split_to_addends(puzzle)
-      puzzle.split(/\s/).select.with_index { _2.even? }
-    end
-
-    def permutation_matches?(permutation, addends, unique_letters)
-      letters_value_matching = build_matching(permutation, unique_letters)
-      return false if sum_carries?(addends) && letters_value_matching[addends.last[0]] != 1
-
-      addends = convert_to_values(addends, letters_value_matching)
-      return false if addends.any? { |addend| addend.first.zero? }
-
-      addends = addends.map { |addend| addend.join.to_i }
-      addends.slice!(-1) == addends.sum
-    end
-
-    def build_matching(permutation, unique_letters)
-      letters_value_matching = {}
-      permutation.each.with_index { |val, ind| letters_value_matching[unique_letters[ind]] = val }
-      letters_value_matching
-    end
-
-    def convert_to_values(addends, letters_value_matching)
-      addends.map do |addend|
-        letters = addend.split('')
-        letters.map { |letter| letters_value_matching[letter] }
+        return equation_letters.zip(permutation).to_h
       end
     end
+    {}
+  end
 
-    def sum_carries?(addends)
-      addends.all? { |addend| addend.length <= addends.last.length }
+  private
+
+  def equation_coefficients
+    @equation_coefficients ||= linear_equation.map(&:last)
+  end
+
+  def equation_letters
+    @equation_letters ||= linear_equation.map(&:first)
+  end
+
+  # Transform the string equation into a linear equation with coefficients.
+  def linear_equation
+    @linear_equation ||= begin
+      *addends, sum = rows
+      result = Hash.new { |h, k| h[k] = 0 }
+      addends.each do |row|
+        row.reverse.chars.each_with_index { |letter, power| result[letter] += 10**power }
+      end
+      sum.reverse.chars.each_with_index { |letter, power| result[letter] -= 10**power }
+      result.sort_by { |k, _| leading_letter == k ? 0 : 1 }
     end
   end
 end
